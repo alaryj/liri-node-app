@@ -4,6 +4,7 @@ var keys = require('./keys.js');
 var Spotify = require('node-spotify-api');
 var request = require("request");
 var secondCommand = process.argv[3];
+var fs = require("fs");
 
 var spotify = new Spotify({
   id: keys.spotify.id, 
@@ -17,7 +18,9 @@ var concert = function (artist) {
   request(url,function(err,response,body){
   var data = JSON.parse(body);
   for (var i = 0; i < data.length; i++) {
+      console.log('================ Concert Info ================');
       console.log(data[i].venue.city + ", " + data[i].venue.name + ", " + data[i].datetime);
+      console.log('==============================================');
   } 
   })    
 }
@@ -36,7 +39,9 @@ function song(songName){
     Album: songData.album.name,
     Artist: songData.artists[0].name
   }
+  console.log('================ Song Info ================');
   console.log(song);
+  console.log('==================THE END==================');
   });
 }
 
@@ -58,7 +63,7 @@ function movie() {
           console.log("Actors: " + body.Actors);
           console.log("Rotten Tomatoes Rating: " + body.Ratings[2].Value);
           console.log("Rotten Tomatoes URL: " + body.tomatoURL);
-          console.log('==================THE END=================');
+          console.log('================== THE END =================');
 
       } else {
           console.log("Error occurred.")
@@ -73,18 +78,14 @@ function movie() {
 }
 
 // DO WHAT IT SAYS do-what-it-says
-function random(){
-  // Using the fs Node package, LIRI will take the text inside of random.txt and then use it to call one of LIRI's commands.
-
-
-  // It should run spotify-this-song for "I Want it That Way," as follows the text in random.txt.
-  // Feel free to change the text in that document to test out the feature for other commands.
-}
-
-// var command = process.argv[2]
-// var searchTerm = process.argv[3]
-//showSong(searchTerm)
-
+function random() {
+  fs.readFile("random.txt", "utf8", function (error, data) {
+      if (!error);
+      console.log('================ Info ===================');
+      console.log(data.toString());
+      console.log('================ THE END ================');
+  });
+} 
 
 if (process.argv[2]==="concert-this"){
   concert(process.argv.slice(3).join(" "))
